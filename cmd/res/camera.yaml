@@ -1,0 +1,50 @@
+name: "camera"
+manufacturer:  "Generic"
+model: "Generic ONVIF"
+labels:
+  - "onvif"
+  - "poe camera"
+description: "EdgeX device profile for ONVIF-compliant IP camera."
+deviceResources:
+  - name: "onvif_device_information"
+    description: "results of ONVIF GetDeviceInformation call"
+    properties:
+      value:
+        { type: "String", readWrite: "RW", defaultValue: "key:value,key:value" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "ONVIFDeviceInformation" }
+  - name: "onvif_profile_information"
+    description: "results of ONVIF GetProfiles call"
+    properties:
+      value:
+        { type: "String", readWrite: "RW", defaultValue: "key:value,key:value" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "ONVIFProfileInformation" }
+deviceCommands:
+  - name: "OnvifDeviceInformation"
+    get:
+      - { operation: "get", object: "onvif_device_information", property: "value", parameter: "cameradevice_onvif_deviceinformation" }
+  - name: "OnvifProfileInformation"
+    get:
+      - { operation: "get", object: "onvif_profile_information", property: "value", parameter: "cameradevice_onvif_profileinformation" }
+coreCommands:
+  - name: OnvifDeviceInformation
+    get:
+        path: "/api/v1/device/{deviceId}/OnvifDeviceInformation"
+        responses:
+          - code: "200"
+            description: "Get ONVIF DeviceInformation"
+            expectedValues: ["onvif_device_information"]
+          - code: "503"
+            description: "Get ONVIF DeviceInformation Error"
+            expectedValues: ["cameradevice_error"]
+  - name: OnvifProfileInformation
+    get:
+        path: "/api/v1/device/{deviceId}/OnvifProfileInformation"
+        responses:
+          - code: "200"
+            description: "Get ONVIF Profiles"
+            expectedValues: ["onvif_profile_information"]
+          - code: "503"
+            description: "Get ONVIF Profiles Error"
+            expectedValues: ["cameradevice_error"]

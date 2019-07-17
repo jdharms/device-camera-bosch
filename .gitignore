@@ -1,0 +1,33 @@
+# Binaries for programs and plugins
+cmd/device-camera-bosch
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.DS_STORE
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# GoLand
+.idea/
+.idea
+vcs.xml
+.DS_Store
+
+# Log files
+*.log
+
+# Glide files
+glide.lock
+
+# Vendor
+vendor
+
+# Docker
+
+

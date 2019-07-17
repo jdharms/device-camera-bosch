@@ -1,0 +1,139 @@
+name: "camera-bosch"
+manufacturer:  "Bosch"
+model: "IP Starlight 7000HD"
+labels:
+  - "camera-onvif"
+  - "poe camera"
+  - "bosch"
+description: "EdgeX device profile for Bosch IP Starlight 7000HD camera."
+deviceResources:
+  - name: "onvif_device_information"
+    description: "results of ONVIF GetDeviceInformation call"
+    properties:
+      value:
+        { type: "String", readWrite: "RW", defaultValue: "key:value,key:value" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "ONVIFDeviceInformation" }
+  - name: "onvif_profile_information"
+    description: "results of ONVIF GetProfiles call"
+    properties:
+      value:
+        { type: "String", readWrite: "RW", defaultValue: "key:value,key:value" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "ONVIFProfileInformation" }
+  - name: "motion_detected"
+    description: "camera device detected motion"
+    attributes:
+      { alarm_type: "16" }
+    properties:
+      value:
+        { type: "Bool", readWrite: "R" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "On/Off" }
+  - name: "tamper_detected"
+    description: "camera device detected tampering"
+    attributes:
+      { alarm_type: "37" }
+    properties:
+    value:
+      { type: "Bool", readWrite: "R" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "On/Off" }
+  - name: "occupancy"
+    description: "number of people in frame"
+    attributes:
+      { counter_name: "occupancy" }
+    properties:
+      value:
+        { type: "Uint32", readWrite: "R" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "People" }
+  - name: "counter"
+    description: "number of people crossing line"
+    attributes:
+      { counter_name: "counter" }
+    properties:
+      value:
+        { type: "Uint32", readWrite: "R" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "People" }
+deviceCommands:
+  - name: "OnvifDeviceInformation"
+    get:
+      - { operation: "get", object: "onvif_device_information", property: "value", parameter: "cameradevice_onvif_deviceinformation" }
+  - name: "OnvifProfileInformation"
+    get:
+      - { operation: "get", object: "onvif_profile_information", property: "value", parameter: "cameradevice_onvif_profileinformation" }
+  - name: "MotionDetected"
+    get:
+      - { operation: "get", object: "motion_detected", property: "value", parameter: "cameradevice_motion" }
+  - name: "TamperDetected"
+    get:
+      - { operation: "get", object: "tamper_detected", property: "value", parameter: "cameradevice_tamper" }
+  - name: "Occupancy"
+    get:
+      - { operation: "get", object: "occupancy", property: "value", parameter: "cameradevice_occupancy" }
+  - name: "Counter"
+    get:
+      - { operation: "get", object: "counter", property: "value", parameter: "cameradevice_counter" }
+coreCommands:
+  - name: MotionDetected
+    get:
+        path: "/api/v1/device/{deviceId}/MotionDetected"
+        responses:
+          - code: "200"
+            description: ""
+            expectedValues: ["motion_detected"]
+          - code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - name: TamperDetected
+    get:
+        path: "/api/v1/device/{deviceId}/TamperDetected"
+        responses:
+          - code: "200"
+            description: ""
+            expectedValues: ["tamper_detected"]
+          - code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - name: Occupancy
+    get:
+        path: "/api/v1/device/{deviceId}/Occupancy"
+        responses:
+          - code: "200"
+            description: ""
+            expectedValues: ["occupancy"]
+          - code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - name: Counter
+    get:
+        path: "/api/v1/device/{deviceId}/Counter"
+        responses:
+          - code: "200"
+            description: ""
+            expectedValues: ["counter"]
+          - code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - name: OnvifDeviceInformation
+    get:
+        path: "/api/v1/device/{deviceId}/OnvifDeviceInformation"
+        responses:
+          - code: "200"
+            description: "Get ONVIF DeviceInformation"
+            expectedValues: ["onvif_device_information"]
+          - code: "503"
+            description: "Get ONVIF DeviceInformation Error"
+            expectedValues: ["cameradevice_error"]
+  - name: OnvifProfileInformation
+    get:
+        path: "/api/v1/device/{deviceId}/OnvifProfileInformation"
+        responses:
+          - code: "200"
+            description: "Get ONVIF Profiles"
+            expectedValues: ["onvif_profile_information"]
+          - code: "503"
+            description: "Get ONVIF Profiles Error"
+            expectedValues: ["cameradevice_error"]
